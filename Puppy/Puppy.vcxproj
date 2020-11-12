@@ -139,10 +139,14 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Dogmanagefunc.c" />
+    <ClCompile Include="Interface.c" />
     <ClCompile Include="main.c" />
     <ClCompile Include="LinkedList.c" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Dogmanagefunc.h" />
+    <ClInclude Include="Interface.h" />
     <ClInclude Include="LinkedList.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

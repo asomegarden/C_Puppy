@@ -3,7 +3,7 @@
 List* Setup(List *p)
 {
 	FILE* fp;
-	fopen_s(&fp, "DATA.bin", "rb");
+	fopen_s(&fp, "DATA.txt", "r");
 
 	if (fp == NULL)
 	{
@@ -11,8 +11,15 @@ List* Setup(List *p)
 	}
 	while (!feof(fp))
 	{
-		printf("adsfdas\n");
-		fread(p, sizeof(List), 1, fp);
+		printf("1");
+		fgets(p->Name, 50, fp);
+		p->Name[strlen(p->Name) - 1] = '\0';
+
+		fgets(p->Feature, 50, fp);
+		p->Feature[strlen(p->Feature) - 1] = '\0';
+
+		fscanf_s(fp, "%d", &p->time);
+
 		p->Next = (List*)malloc(sizeof(List));
 		p = p->Next;
 		p->Next = NULL;
@@ -23,7 +30,7 @@ List* Setup(List *p)
 
 char MenuList()
 {
-	char number;
+	int number;
 	system("cls");
 	puts("링크드 리스트");
 	puts("1. 추가");
@@ -35,17 +42,47 @@ char MenuList()
 
 	printf("번호 선택 : ");
 	fflush(stdin);
-	number = getchar();
+	scanf_s("%d", &number);
 	getc(stdin);
 	return number;
+}
+void listmenu(List* head, List* tail)
+{
+	while (TRUE)
+	{
+		switch (MenuList())
+		{
+		case 1:
+			tail = AppendList(tail);
+			break;
+		case 2:
+			head = InsertList(head);
+			break;
+		case 3:
+			UpdateList(head);
+			break;
+		case 4:
+			head = DeleteList(head);
+			break;
+		case 5:
+			DisplayList(head);
+			break;
+		case 0:
+			SaveFile(head);
+			FreeMallocList(head);
+			return;
+		default:
+			puts("없는 메뉴");
+		}
+	}
 }
 List* AppendList(List* p)
 {
 	printf("품종명을 입력하세요 : ");
 	gets_s(p->Name, sizeof(p->Name));
 
-	printf("계수를 입력하세요 : ");
-	scanf_s("%d", &p->Coef);
+	printf("권장 산책 시간을 입력하세요(단위 : 분) : ");
+	scanf_s("%d", &p->time);
 	getc(stdin);
 
 	printf("특징을 입력하세요 : ");
@@ -60,10 +97,10 @@ List* AppendList(List* p)
 int DisplayList(List* p)
 {
 	int i = 1;
-	puts("품종\t\t계수\t특징");
+	puts("  품종\t\t권장 산책 시간\t특징");
 	while (p->Next != NULL)
 	{
-		printf("%3d %20s %4d %10s\n", i++, p->Name, p->Coef, p->Feature);
+		printf("%d %10s %4d %10s\n", i++, p->Name, p->time, p->Feature);
 		p = p->Next;
 	}
 	system("pause");
@@ -88,7 +125,7 @@ List* InsertList(List* p)
 	gets_s(p->Name, sizeof(p->Name));
 
 	printf("계수를 입력하세요 : ");
-	scanf_s("%d", &p->Coef);
+	scanf_s("%d", &p->time);
 	getc(stdin);
 
 	printf("특징을 입력하세요 : ");
@@ -111,6 +148,30 @@ List* InsertList(List* p)
 	return start;
 }
 
+List getData(List* p)
+{
+	int pos, number;
+	number = DisplayList(p);
+	do {
+		printf("번호 선택 : ");
+		scanf_s("%d", &pos);
+		getc(stdin);
+	} while (pos<1 || pos>number);
+	if (pos == 1)
+	{
+		return *p;
+	}
+	else
+	{
+		int i;
+		for (i = 1; i < pos; i++)
+		{
+			p = p->Next;
+		}
+		return *p;
+	}
+}
+
 void UpdateList(List* p)
 {
 	int pos, number;
@@ -127,7 +188,7 @@ void UpdateList(List* p)
 		gets_s(p->Name, sizeof(p->Name));
 
 		printf("변경된 계수를 입력하세요 : ");
-		scanf_s("%d", &p->Coef);
+		scanf_s("%d", &p->time);
 		getc(stdin);
 
 		printf("변경된 특징을 입력하세요 : ");
@@ -144,7 +205,7 @@ void UpdateList(List* p)
 		gets_s(p->Name, sizeof(p->Name));
 
 		printf("변경된 계수를 입력하세요 : ");
-		scanf_s("%d", &p->Coef);
+		scanf_s("%d", &p->time);
 		getc(stdin);
 
 		printf("변경된 특징을 입력하세요 : ");
@@ -194,10 +255,11 @@ void FreeMallocList(List* p)
 	}
 	puts("파일에 저장중");
 }
+
 void SaveFile(List* p)
 {
 	FILE* fp;
-	fopen_s(&fp, "DATA.bin", "wb");
+	fopen_s(&fp, "DATA.txt", "w");
 
 	if (fp == NULL)
 	{
@@ -207,7 +269,7 @@ void SaveFile(List* p)
 
 	while (p->Next != NULL)
 	{
-		fwrite(p, sizeof(p), 1, fp);
+		fprintf(fp, "%s\n%s\n%d", p->Name, p->Feature, p->time);
 		p = p->Next;
 	}
 	fclose(fp);
