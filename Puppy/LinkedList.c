@@ -124,7 +124,7 @@ List* InsertList(List* p)
 	printf("품종명을 입력하세요 : ");
 	gets_s(p->Name, sizeof(p->Name));
 
-	printf("계수를 입력하세요 : ");
+	printf("권장 산책 시간를 입력하세요 : ");
 	scanf_s("%d", &p->time);
 	getc(stdin);
 
@@ -187,7 +187,7 @@ void UpdateList(List* p)
 		printf("변경된 품종명을 입력하세요 : ");
 		gets_s(p->Name, sizeof(p->Name));
 
-		printf("변경된 계수를 입력하세요 : ");
+		printf("변경된 권장 산책 시간을 입력하세요 : ");
 		scanf_s("%d", &p->time);
 		getc(stdin);
 
@@ -204,7 +204,7 @@ void UpdateList(List* p)
 		printf("변경된 품종명을 입력하세요 : ");
 		gets_s(p->Name, sizeof(p->Name));
 
-		printf("변경된 계수를 입력하세요 : ");
+		printf("변경된 권장 산책 시간을 입력하세요 : ");
 		scanf_s("%d", &p->time);
 		getc(stdin);
 

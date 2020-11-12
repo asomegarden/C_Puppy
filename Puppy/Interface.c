@@ -4,9 +4,9 @@ void initscreen()
 {
 	system("mode con cols=100 lines=40");
 	textcolor(10);
-	setCur(30, 10);
+	setCur(40, 15);
 	printf("애견 관리 시스템\n");
-	setCur(20, 20);
+	setCur(32, 25);
 	textcolor(15);
 	system("pause");
 }

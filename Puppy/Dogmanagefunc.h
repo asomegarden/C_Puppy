@@ -1,5 +1,5 @@
 #pragma once
-typedef struct mrDog
+typedef struct myDog
 {
 	double weight;
 	double goodweight;
@@ -7,12 +7,13 @@ typedef struct mrDog
 	char kind[50];
 	char feature[50];
 	int goodtime;
-	char walk[7];
+	int walk[8];
 	double stress;
 	int fat;
 	
 }myDog;
-double getfat(double weight, double *fat);
+double getfat(myDog *dog);
 void dogstate_screen(int *refresh);
+void strcopy(char str1[], char str2[]);
 int loadinfo(myDog* p);
 int saveinfo(myDog* p);
