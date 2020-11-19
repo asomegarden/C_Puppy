@@ -3,6 +3,7 @@
 void initscreen()
 {
 	system("mode con cols=100 lines=40");
+	setTitle("애견 관리 시스템");
 	textcolor(10);
 	setCur(40, 15);
 	printf("애견 관리 시스템\n");

@@ -97,10 +97,10 @@ List* AppendList(List* p)
 int DisplayList(List* p)
 {
 	int i = 1;
-	puts("  품종\t\t권장 산책 시간\t특징");
+	puts("\t품종\t\t권장 산책 시간\t\t특징");
 	while (p->Next != NULL)
 	{
-		printf("%d %10s %4d %10s\n", i++, p->Name, p->time, p->Feature);
+		printf("%d %15s %12d분 %35s\n", i++, p->Name, p->time, p->Feature);
 		p = p->Next;
 	}
 	system("pause");

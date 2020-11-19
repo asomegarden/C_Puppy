@@ -159,7 +159,7 @@ void dogstate_screen(int *refresh)
 		case 1:
 			printf("애견의 무게를 입력하세요 : ");
 			scanf_s("%lf", &dog.weight);
-			dog.goodweight = (double)(dog.weight * (100-dog.fat) / 100) / 0.8;
+			dog.goodweight = (double)(dog.weight * (100-(double)dog.fat) / 100) / 0.8;
 			loop = 0;
 			saveinfo(&dog, tm.tm_mon + 1, tm.tm_mday);
 			break;
