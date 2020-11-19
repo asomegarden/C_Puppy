@@ -104,29 +104,29 @@ void dogstate_screen(int *refresh)
 		setCur(0, 37);
 		if (dog.stress < 0)
 		{
-			printf("산책 날짜를 기록해보세요", dog.stress);
+			printf("산책 날짜를 기록해보세요");
 		}
 		else if (dog.stress >= 0 && dog.stress < 20)
 		{
-			printf("스트레스 지수 : %lf  ", dog.stress);
+			printf("스트레스 지수 : %.2lf%%  ", dog.stress);
 			textcolor(14);
 			printf("%s가 만족하고 있어요", dog.name);
 		}
 		else if (dog.stress >= 20 && dog.stress < 40)
 		{
-			printf("스트레스 지수 : %lf  ", dog.stress);
+			printf("스트레스 지수 : %.2lf%%  ", dog.stress);
 			textcolor(14);
 			printf("아직 괜찮지만 더 자주 나가주세요");
 		}
 		else if (dog.stress >= 40 && dog.stress < 60)
 		{
-			printf("스트레스 지수 : %lf  ", dog.stress);
+			printf("스트레스 지수 : %.2lf%%  ", dog.stress);
 			textcolor(13);
 			printf("%s이가 점점 스트레스를 받고 있어요", dog.name);
 		}
 		else if (dog.stress >= 60)
 		{
-			printf("스트레스 지수 : %lf  ", dog.stress);
+			printf("스트레스 지수 : %.2lf%%  ", dog.stress);
 			textcolor(12);
 			printf("당장 산책을 나가주세요!");
 		}

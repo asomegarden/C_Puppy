@@ -10,14 +10,13 @@ typedef struct myDog
 	int fat;
 	int walk[7];
 	int goodtime;
-	
+
 }myDog;
 typedef struct tDate
 {
 	int month;
 	int day;
 }tDate;
-
 
 double getfat(myDog *dog);
 void getstress(myDog *dog);
