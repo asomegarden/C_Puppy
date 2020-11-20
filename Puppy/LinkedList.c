@@ -9,9 +9,8 @@ List* Setup(List *p)
 	{
 		return NULL;
 	}
-	while (!feof(fp))
+	while (!feof(fp)) //파일에서 읽어오기
 	{
-		printf("1");
 		fgets(p->Name, 50, fp);
 		p->Name[strlen(p->Name) - 1] = '\0';
 
@@ -22,7 +21,7 @@ List* Setup(List *p)
 
 		p->Next = (List*)malloc(sizeof(List));
 		p = p->Next;
-		p->Next = NULL;
+		p->Next = NULL; //하나 가져올 때마다 노드 하나씩 생성
 	}
 	fclose(fp);
 	return p;
@@ -88,9 +87,9 @@ List* AppendList(List* p)
 	printf("특징을 입력하세요 : ");
 	gets_s(p->Feature, sizeof(p->Feature));
 
-	p->Next = (List*)malloc(sizeof(List));
+	p->Next = (List*)malloc(sizeof(List)); //맨 끝에 노드 생성
 	p = p->Next;
-	p->Next = NULL;
+	p->Next = NULL; //꼬리 노드의 링크 초기화
 	return p;
 }
 
@@ -98,13 +97,13 @@ int DisplayList(List* p)
 {
 	int i = 1;
 	puts("\t품종\t\t권장 산책 시간\t\t특징");
-	while (p->Next != NULL)
+	while (p->Next != NULL) //더이상 다음 노드가 없을 때까지
 	{
 		printf("%d %15s %12d분 %35s\n", i++, p->Name, p->time, p->Feature);
 		p = p->Next;
 	}
 	system("pause");
-	return i - 1;
+	return i - 1; // 리스트 길이 반환
 }
 
 List* InsertList(List* p)
@@ -112,43 +111,45 @@ List* InsertList(List* p)
 	int pos, number;
 	List* item;
 	List* start = p;
-	item = (List*)malloc(sizeof(List));
-	number = DisplayList(p);
+	item = (List*)malloc(sizeof(List)); //새로 추가할 노드
+	number = DisplayList(p); //리스트 길이 얻어옴
 
 	do {
 		printf("삽입할 위치 : ");
 		scanf_s("%d", &pos);
 		getc(stdin);
-	} while (pos<1 || pos>number);
+	} while (pos<1 || pos>number); 
 
 	printf("품종명을 입력하세요 : ");
-	gets_s(p->Name, sizeof(p->Name));
+	gets_s(item->Name, sizeof(item->Name));
 
 	printf("권장 산책 시간를 입력하세요 : ");
-	scanf_s("%d", &p->time);
+	scanf_s("%d", &item->time);
 	getc(stdin);
 
 	printf("특징을 입력하세요 : ");
-	gets_s(p->Feature, sizeof(p->Feature));
+	gets_s(item->Feature, sizeof(item->Feature));
 
 	if (pos == 1)
 	{
-		item->Next = p;
-		start = item;
+		item->Next = p; //head는 두 번째 노드가 됨
+		start = item; //item은 start가 됨
 	}
 	else
 	{
 		for (int i = 1; i < pos - 1; i++)
 		{
-			p = p->Next;
+			p = p->Next; // 선택한 위치 이전까지 이동
 		}
-		item->Next = p->Next;
-		p->Next = item;
+		printf("%s", p->Name);
+		system("pause");
+		item->Next = p->Next; //아이템이 가리키는 노드는 선택한 위치의 노드
+		p->Next = item; //선택한 노드 이전 위치의 노드가 item를 가리킴
 	}
 	return start;
 }
 
-List getData(List* p)
+List getData(List* p) //선택한 위치의 노드 가져옴
 {
 	int pos, number;
 	number = DisplayList(p);
@@ -159,16 +160,16 @@ List getData(List* p)
 	} while (pos<1 || pos>number);
 	if (pos == 1)
 	{
-		return *p;
+		return *p; //1일경우 첫 노드 반환
 	}
 	else
 	{
 		int i;
 		for (i = 1; i < pos; i++)
 		{
-			p = p->Next;
+			p = p->Next; //선택한 위치까지 이동
 		}
-		return *p;
+		return *p; //반환
 	}
 }
 
@@ -182,7 +183,7 @@ void UpdateList(List* p)
 		getc(stdin);
 	} while (pos<1 || pos>number);
 
-	if (pos == 1)
+	if (pos == 1) //1일경우 바로 작성
 	{
 		printf("변경된 품종명을 입력하세요 : ");
 		gets_s(p->Name, sizeof(p->Name));
@@ -194,7 +195,7 @@ void UpdateList(List* p)
 		printf("변경된 특징을 입력하세요 : ");
 		gets_s(p->Feature, sizeof(p->Feature));
 	}
-	else
+	else //아닐경우 해당 위치까지 이동 후 작성
 	{
 		int i;
 		for (i = 1; i < pos; i++)
@@ -225,26 +226,26 @@ List* DeleteList(List* p)
 		getc(stdin);
 	} while (pos<1 || pos>number);
 
-	if (pos == 1)
+	if (pos == 1) //1일경우 start는 그 다음 노드가 됨 (head가 바뀜)
 	{
 		start = p->Next;
 		free(p);
 	}
 	else
 	{
-		List* tmp;
+		List* temp;
 		for (int i = 1; i < pos - 1; i++)
 		{
-			p = p->Next;
+			p = p->Next; //해당 위치 이전까지 이동
 		}
-		tmp = p->Next;
-		p->Next = p->Next->Next;
-		free(tmp);
+		temp = p->Next; //temp에 해당 위치 저장
+		p->Next = p->Next->Next;//선택한 위치 건너뛰고 연결
+		free(temp);
 	}
 	return start;
 }
 
-void FreeMallocList(List* p)
+void FreeMallocList(List* p) //모두 메모리 할당 해제
 {
 	List* tmp = p;
 	while (p != NULL)
@@ -269,7 +270,7 @@ void SaveFile(List* p)
 
 	while (p->Next != NULL)
 	{
-		fprintf(fp, "%s\n%s\n%d", p->Name, p->Feature, p->time);
+		fprintf(fp, "%s\n%s\n%d", p->Name, p->Feature, p->time); //파일에 저장
 		p = p->Next;
 	}
 	fclose(fp);

@@ -7,11 +7,11 @@
 
 typedef struct List
 {
-	char Name[50];
+	char Name[50]; //품종명
 	int time; //권장 산책 시간
-	char Feature[50]; //단두종, 장모종 등등
+	char Feature[50]; //특징
 
-	struct List* Next;
+	struct List* Next; //링크
 }List;
 
 List* Setup(List *p);

@@ -3,27 +3,27 @@
 #include "Interface.h"
 #include "Dogmanagefunc.h"
 
-void dogstate_screen(int *refresh)
+void dogstate_screen(int *refresh) //메인 화면 구성
 {
 	List* head = (List*)malloc(sizeof(List));
 	List* tail = head;
-	head->Next = NULL;
+	head->Next = NULL; //연결 리스트를 불러오기 위해
 
 	if (Setup(tail) == NULL);
-	else tail = Setup(tail);
+	else tail = Setup(tail); //연결 리스트 불러옴
 
-	int loop = 1;
-	List mydogdata;
+	int loop = 1; //메인 화면에서 선택 루프
+	List mydogdata; 
 	tDate pastdate;
 
 	time_t t = time(NULL);
 	struct tm tm;
-	localtime_s(&tm, &t);
+	localtime_s(&tm, &t); //현재 시간 가져옴
 
 	while (loop)
 	{
 		myDog dog;
-		if (!(loadinfo(&dog, &pastdate)))
+		if (!(loadinfo(&dog, &pastdate))) //정보를 불러오고 만약 없다면 초기 설정
 		{
 			system("cls");
 			printf("기존 설정을 찾을 수 없습니다. 초기 설정을 시작합니다.\n");
@@ -31,8 +31,8 @@ void dogstate_screen(int *refresh)
 			scanf_s("%s", dog.name, sizeof(dog.name));
 			printf("무게 : ");
 			scanf_s("%lf", &dog.weight);
-			mydogdata = getData(head);
-			strcopy(dog.kind, mydogdata.Name);
+			mydogdata = getData(head); //연결 리스트에서 정보 가져옴
+			strcopy(dog.kind, mydogdata.Name); //문자열 대입을 위해
 			dog.goodtime = mydogdata.time;
 			strcopy(dog.feature, mydogdata.Feature);
 			for (int i = 0; i < 7; i++)
@@ -47,8 +47,8 @@ void dogstate_screen(int *refresh)
 			pastdate.month = tm.tm_mday;
 		}
 		int sel;
-		checkpast(&dog, &pastdate, tm.tm_mon + 1, tm.tm_mday);
-		getstress(&dog);
+		checkpast(&dog, &pastdate, tm.tm_mon + 1, tm.tm_mday); //산책 정보 가져옴
+		getstress(&dog); //스트레스 정보 업데이트
 
 		system("cls");
 		setCur(0, 0);
@@ -57,9 +57,9 @@ void dogstate_screen(int *refresh)
 		printf("(%s)", dog.kind);
 		setCur(0, 1);
 		printf("특징 : %s", dog.feature);
-		setCur(0, 33);
+		setCur(0, 33); //상단 화면 구성
 
-		if (dog.fat == 0)
+		if (dog.fat == 0) //여기서부터 애견 체중 관련 정보
 		{
 			printf("애견의 BCS를 입력해주세요.");
 		}
@@ -95,7 +95,7 @@ void dogstate_screen(int *refresh)
 		}
 		printf("\t현재체중 : %.2lfkg || 적정체중 : %.2lfkg", dog.weight, dog.goodweight);
 		setCur(0, 35);
-		printf("하루에 %d분씩 산책이 적당해요", dog.goodtime);
+		printf("하루에 %d분씩 산책이 적당해요", dog.goodtime); //여기서부터 애견 산책 관련 정보
 		setCur(0, 36);
 		printf("최근 7일간 산책 기록 : ");
 		for (int i = 0; i < 7; i++)
@@ -133,7 +133,7 @@ void dogstate_screen(int *refresh)
 		}
 		textcolor(15);
 
-		setCur(65, 5);
+		setCur(65, 5); //선택 메뉴
 		printf("1. 체중 입력");
 		setCur(65, 6);
 		printf("2. BCS 입력");
@@ -160,12 +160,12 @@ void dogstate_screen(int *refresh)
 			printf("애견의 무게를 입력하세요 : ");
 			scanf_s("%lf", &dog.weight);
 			dog.goodweight = (double)(dog.weight * (100-(double)dog.fat) / 100) / 0.8;
-			loop = 0;
-			saveinfo(&dog, tm.tm_mon + 1, tm.tm_mday);
+			loop = 0;  //함수가 종료됐다가 다시 실행됨 (새로고침)
+			saveinfo(&dog, tm.tm_mon + 1, tm.tm_mday); //정보가 바뀔 때마다 파일에 저장
 			break;
 		case 2:
 			system("cls");
-			dog.goodweight = getfat(&dog);
+			dog.goodweight = getfat(&dog); //적정 체중 가져옴
 			loop = 0;
 			saveinfo(&dog, tm.tm_mon + 1, tm.tm_mday);
 			break;
@@ -191,26 +191,26 @@ void dogstate_screen(int *refresh)
 			saveinfo(&dog, tm.tm_mon + 1, tm.tm_mday);
 			break;
 		case 5:
-			listmenu(head, tail);
+			listmenu(head, tail); //연결 리스트 메뉴 실행
 			break;
 
 		case 6:
-			remove("./myinfo.txt");
+			remove("./myinfo.txt"); //애견 정보 파일 삭제
 			break;
 		case 7:
-			help();
+			help(); //도움말 실행
 			loop = 0;
 			break;
 		case 0:
 			system("cls");
 			loop = 0;
-			*refresh = 0;
+			*refresh = 0; //메인 함수에서 루프가 종료됨 (프로그램 종료)
 			break;
 		}
 	}
 }
 
-double getfat(myDog* dog)
+double getfat(myDog* dog) //체지방률 설정, 적정 체중 반환
 {
 	int sel;
 
@@ -282,7 +282,7 @@ double getfat(myDog* dog)
 	}
 }
 
-void getstress(myDog* dog)
+void getstress(myDog* dog) //산책 정보를 바탕으로 현재 스트레스 지수 설정
 {
 	double max = (double)dog->goodtime * 7;
 	double stress = max;
@@ -292,7 +292,7 @@ void getstress(myDog* dog)
 	{
 		if (dog->walk[i] + 10 > dog->goodtime)
 		{
-			temp[i] = dog->goodtime + 10;
+			temp[i] = dog->goodtime + 10; //아무리 산책을 많이했어도 최대 +10분까지만 인정
 		}
 		else
 		{
@@ -314,11 +314,11 @@ void getstress(myDog* dog)
 	}
 	else
 	{
-		dog->stress = stress/max*100;
+		dog->stress = stress/max*100; //백분율로 나타냄
 	}
 }
 
-int loadinfo(myDog* p, tDate *q)
+int loadinfo(myDog* p, tDate *q) //myinfo.txt에서 정보 가져옴
 {
 	FILE* fp;
 	fopen_s(&fp, "myinfo.txt", "r");
@@ -354,7 +354,7 @@ int loadinfo(myDog* p, tDate *q)
 	fclose(fp);
 	return 1;
 }
-int saveinfo(myDog* p, int mon, int day)
+int saveinfo(myDog* p, int mon, int day) //myinfo.txt로 정보 내보내기
 {
 	FILE* fp;
 	fopen_s(&fp, "myinfo.txt", "w");
@@ -374,7 +374,7 @@ int saveinfo(myDog* p, int mon, int day)
 	fclose(fp);
 	return 1;
 }
-void strcopy(char str1[], char str2[])
+void strcopy(char str1[], char str2[]) //문자열을 대입해주기 위해 만듦
 {
 	int len = 0, i;
 	if (strlen(str1) > strlen(str2)) len = strlen(str2);
@@ -387,7 +387,7 @@ void strcopy(char str1[], char str2[])
 	}
 	str1[i] = '\0';
 }
-void help()
+void help() //도움말 출력
 {
 	system("cls");
 	setCur(40, 5);
@@ -426,12 +426,12 @@ void help()
 	setCur(10, 25);
 	system("pause");
 }
-int checkpast(myDog* dog, tDate* past, int mon, int day)
+int checkpast(myDog* dog, tDate* past, int mon, int day) //며칠이 지났는지 확인하고 그에 맞추어 배열 시프트
 {
 	if (mon == past->month && day == past->day) return 0;
 	else
 	{
-		if (mon != past->month)
+		if (mon != past->month) //달이 바뀌었으면 산책 기록 초기화
 		{
 			for (int i = 0; i < 7; i++)
 			{
