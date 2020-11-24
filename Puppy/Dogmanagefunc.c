@@ -48,6 +48,7 @@ void dogstate_screen(int *refresh)
 		}
 		int sel;
 		checkpast(&dog, &pastdate, tm.tm_mon + 1, tm.tm_mday);
+		getstress(&dog);
 
 		system("cls");
 		setCur(0, 0);
@@ -122,7 +123,7 @@ void dogstate_screen(int *refresh)
 		{
 			printf("스트레스 지수 : %.2lf%%  ", dog.stress);
 			textcolor(13);
-			printf("%s이가 점점 스트레스를 받고 있어요", dog.name);
+			printf("%s가 점점 스트레스를 받고 있어요", dog.name);
 		}
 		else if (dog.stress >= 60)
 		{
@@ -447,8 +448,9 @@ int checkpast(myDog* dog, tDate* past, int mon, int day)
 				{
 					dog->walk[j] = dog->walk[j + 1];
 				}
+				dog->walk[6] = 0;
 			}
-			dog->walk[6] = 0;
+			
 		}
 	}
 }
