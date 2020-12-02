@@ -376,12 +376,9 @@ int saveinfo(myDog* p, int mon, int day) //myinfo.txt로 정보 내보내기
 }
 void strcopy(char str1[], char str2[]) //문자열을 대입해주기 위해 만듦
 {
-	int len = 0, i;
-	if (strlen(str1) > strlen(str2)) len = strlen(str2);
-	else if (strlen(str2) > strlen(str1)) len = strlen(str1);
-	else  len = strlen(str2);
+	int i = 0;
 
-	for (i = 0; i < len; i++)
+	for (i = 0; i < strlen(str2); i++)
 	{
 		if (str2[i] != '\0') str1[i] = str2[i];
 	}
